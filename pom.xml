@@ -49,6 +49,12 @@
 			<classifier>raml</classifier>
 			<type>zip</type>
 		</dependency>
+		<dependency>
+			<groupId>10339a90-b6cf-4a68-8cc1-ec2e54f05373</groupId>
+			<artifactId>mule-plugin-prc-spots</artifactId>
+			<version>1.0.2</version>
+			<classifier>mule-plugin</classifier>
+		</dependency>
 	</dependencies>
 
 	<repositories>

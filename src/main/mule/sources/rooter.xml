@@ -33,19 +33,9 @@
     </flow>
     <!-- [STUDIO:"METHOD:\ENDPOINT(URI):exp-climbsmart-api-config"]<flow name="METHOD:\ENDPOINT(URI):exp-climbsmart-api-config" doc:id="fbd353e0-36d4-4c3f-843f-74896877d562" /> [STUDIO] -->
     <flow name="get:\climbing-spots:exp-climbsmart-api-config">
-        <ee:transform doc:name="Transform Message">
-            <ee:message>
-                <ee:set-payload><![CDATA[%dw 2.0
-output application/json
----
-{
-  correlationId: "fe5zef1-194b-475c-8dee-0zef56zf4180",
-  statusCode: 500,
-  namespace: "APIKIT",
-  identifier: "INTERNAL_SERVER_ERROR",
-  description: "Something went wrong"
-} as Object {encoding: "UTF-8", mediaType: "application/json"}]]></ee:set-payload>
-            </ee:message>
-        </ee:transform>
+        <set-variable value='#[attributes.queryParams.level default ""]' doc:name="[level]" doc:id="9749559a-80be-48cd-9f44-7eac9d233f32" variableName="level"/>
+		<set-variable value='#[attributes.queryParams.region default ""]' doc:name="[region]" doc:id="077af189-4b2e-473f-a1e5-07c2806e28a0" variableName="region"/>
+		<set-variable value='#[attributes.queryParams.date default ""]' doc:name="[date]" doc:id="4fee7965-f635-4059-a229-6622152fee49" variableName="date"/>
+		<flow-ref doc:name="impl-get-climbing-spots" doc:id="6bed00a8-3a29-4ebb-96ba-6386a4906545" name="impl-get-climbing-spots"/>
     </flow>
 </mule>

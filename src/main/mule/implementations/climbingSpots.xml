@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:prc-spots="http://www.mulesoft.org/schema/mule/prc-spots" xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/prc-spots http://www.mulesoft.org/schema/mule/prc-spots/current/mule-prc-spots.xsd">
+	<sub-flow name="impl-get-climbing-spots" doc:id="738eb82b-cc3f-49b5-8bbf-275fb0450fde" >
+		<logger level="DEBUG" doc:name="Start" doc:id="9d870c6f-e8fe-438b-92cc-51ef3f843806" message="#[%dw 2.0&#10;&#10;output application/json indent=false&#10;---&#10;{&#10;    step: vars.metadata.startStep,&#10;    data: {&#10;        business:  {&#10;        	region: vars.region,&#10;        	level: vars.level,&#10;        	date: vars.date&#10;        },&#10;        technical: {&#10;            flowId: vars.metadata.flowId,&#10;            correlationId: vars.metadata.correlationId&#10;        }&#10;    }&#10;}]" category="${app.name}" />
+		<prc-spots:retrieve-climbing-spots doc:name="Retrieve climbing-spots" doc:id="01eafab1-7ee8-46b4-890f-88cb3221d846" region="#[vars.region]" level="#[vars.level]" date="#[vars.date]" config-ref="Prc_spots_Config"/>
+		<set-payload value="#[payload.data default payload]" doc:name="Set Payload" doc:id="84f78a87-0782-4009-bc69-404468402f10" />
+		<logger level="DEBUG" doc:name="End" doc:id="a9bdee28-32fb-4bea-8ee3-d64786da8d26" message="#[%dw 2.0&#10;output json indent=false&#10;&#10;---&#10;{&#10; step: vars.metadata.endStep,&#10; data: {&#10;  business: {&#10;  	data: payload&#10;  },&#10;  technical: {}&#10; }&#10;}]" category="${app.name}" />
+	</sub-flow>
+</mule>
