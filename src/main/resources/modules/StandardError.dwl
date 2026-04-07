@@ -7,6 +7,6 @@ output json
     statusCode: vars.httpStatus,
     namespace: error.errorType.namespace,
     identifier: error.errorType.identifier,
-    description: vars.description default error.errorMessage.payload default error.description
+    description: error.errorMessage.payload default vars.description default error.description
 
 }
