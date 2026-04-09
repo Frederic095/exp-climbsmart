@@ -38,7 +38,7 @@ http://www.mulesoft.org/schema/mule/prc-spots http://www.mulesoft.org/schema/mul
 		key="${mule.encryptionKey}" />
 	<api-gateway:autodiscovery apiId="${autodiscoveryId}" ignoreBasePath="true" doc:name="API Autodiscovery" doc:id="6938075d-7b75-4c3b-9925-8340eb6437cf" flowRef="exp-climbsmart-api-main" />
 	<configuration doc:name="Configuration" doc:id="e30646d3-c969-4cba-8749-6f2da155df82" defaultErrorHandler-ref="globalsError_Handler" />
-	<prc-spots:config name="Prc_spots_Config" doc:name="Prc-spots Config" doc:id="6b3d378c-51ce-410c-9f70-6338fb3acb24" property_host="${prc-spots.host}" property_port="${prc-spots.port}" property_protocol="${protocol}" property_client-id="${prc-spots.client-id}" property_client-secret="${prc-spots.client-secret}" />
+	<prc-spots:config name="Prc_spots_Config" doc:name="Prc-spots Config" doc:id="6b3d378c-51ce-410c-9f70-6338fb3acb24" property_host="${prc-spots.host}" property_port="${prc-spots.port}" property_protocol="${protocol}" property_client-id="${prc-spots.client-id}" property_client-secret="${prc-spots.client-secret}" property_responseTimeout="${response-timeout}"/>
 	<sub-flow name="genericError" doc:id="970c16a1-fccd-436c-aefa-b50da2f3a6bf" >
 		<set-variable value='#[error.errorType.identifier match {&#10;  case "BAD_REQUEST"            -&gt; 400&#10;  case "UNAUTHORIZED"           -&gt; 401&#10;  case "FORBIDDEN"              -&gt; 403&#10;  case "NOT_FOUND"              -&gt; 404&#10;  case "METHOD_NOT_ALLOWED"     -&gt; 405&#10;  case "NOT_ACCEPTABLE"         -&gt; 406&#10;  case "CONFLICT"                -&gt; 409&#10;  case "UNSUPPORTED_MEDIA_TYPE" -&gt; 415&#10;  case "NOT_IMPLEMENTED"        -&gt; 501&#10;  else                          -&gt; error.errorMessage.attributes.statusCode default vars.httpStatus default 500&#10;}]' doc:name="[httpStatus]" doc:id="f9dd5ffa-08b8-4ae5-9131-8a2a5402af72" variableName="httpStatus"/>
 		<ee:transform doc:name="Transform Message" doc:id="5951f506-39c5-43bc-b4d2-7c471607a928" >
@@ -49,11 +49,11 @@ http://www.mulesoft.org/schema/mule/prc-spots http://www.mulesoft.org/schema/mul
 		<logger level="INFO" doc:name="ERROR" doc:id="280e34b5-d6ec-4b2d-8178-d4110b7a96a9" message='#[%dw 2.0&#10;output json&#10;&#10;---&#10;{&#10;	step: "Global error handler",&#10;	data: {&#10;		business: {},&#10;		technical: payload&#10;		&#10;		}&#10;}]'/>
 	</sub-flow>
 	<error-handler name="globalsError_Handler" doc:id="72ebaf62-63e6-458a-96e9-6f39dfada834" >
-		<!-- [STUDIO:"custom error"]<on-error-propagate enableNotifications="true" logException="true" doc:name="custom error" doc:id="5f890587-150d-4287-9df6-277d2dbc38d4" type="CUSTOM:ERROR">
-			<set-variable value="" doc:name="[description&#93;" doc:id="ec162fe7-a236-4cf8-89fc-be09e9123a5c" variableName="description"/>
-			<set-variable value="" doc:name="[httpStatus&#93;" doc:id="2ac6a924-d2ea-41af-890f-89743630fbf1" variableName="httpStatus"/>
+		<on-error-propagate enableNotifications="true" logException="true" doc:name="CLIMB_SMART" doc:id="5f890587-150d-4287-9df6-277d2dbc38d4" type="CLIMB_SMART:BAD_REQUEST">
+			<set-variable value="Date is invalid. Must be within 14 days from today." doc:name="[description]" doc:id="ec162fe7-a236-4cf8-89fc-be09e9123a5c" variableName="description"/>
+			<set-variable value="400" doc:name="[httpStatus]" doc:id="2ac6a924-d2ea-41af-890f-89743630fbf1" variableName="httpStatus"/>
 			<flow-ref doc:name="genericError" doc:id="69383490-0c3b-4a2d-8820-77ac5972ad38" name="genericError"/>
-		</on-error-propagate> [STUDIO] -->
+		</on-error-propagate>
 		<on-error-propagate enableNotifications="true" logException="true" doc:name="On Error Propagate" doc:id="e4897f93-9269-46a1-8859-dc2d670aa533" >
 			<flow-ref doc:name="genericError" doc:id="2ce96aee-25df-4afb-ad13-ffe2ff1c3564" name="genericError"/>
 		</on-error-propagate>
